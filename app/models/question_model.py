@@ -5,29 +5,27 @@ from beanie import Document, Indexed, Link, before_event, Replace, Insert
 from pydantic import Field, EmailStr
 from .user_model import User
 
-class Todo(Document):
-    todo_id: UUID = Field(default_factory=uuid4, unique = True)
-    couleur: Indexed(str)
-    marque: Indexed(str)
-    quantite: float
-    restant: float
-    description: str = None
+class Question(Document):
+    question_id: UUID = Field(default_factory=uuid4, unique = True)
+    titre: str
+    reponse : bool
+    description: str
     created_at : datetime = Field(default_factory=datetime.utcnow)
     updated_at : datetime = Field(default_factory=datetime.utcnow)
     owner : Link[User]
 
     def __repr__(self) -> str:
-        return f"<Todo {self.couleur}>"
+        return f"<Question {self.titre}>"
 
     def __str__(self) -> str:
-        return self.couleur
+        return self.titre
 
     def __hash__(self) -> int:
-        return hash(self.couleur)
+        return hash(self.titre)
 
     def __eq__(self, other: object) -> bool:
-        if isinstance(other, Todo):
-            return self.todo_id == other.todo_id
+        if isinstance(other, Question):
+            return self.question_id == other.question_id
         return False
     
     @before_event([Replace, Insert])
@@ -35,4 +33,4 @@ class Todo(Document):
         self.updated_at= datetime.utcnow()
 
     class Collection:
-        name = "todos"    
+        name = "questions"    

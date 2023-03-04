@@ -10,13 +10,9 @@ class UserService:
     @staticmethod
     async def create_user(user: UserAuth):
         user_in = User(
-            username = user.username,
-            email= user.email,
+            matricule = user.matricule,
             role= user.role,
             hashed_password=get_password(user.password),
-            mobile= user.mobile,
-            adresse= user.adresse,
-            cin= user.cin,
             first_name=user.first_name,
             last_name= user.last_name
         )
@@ -24,8 +20,8 @@ class UserService:
         return user_in
 
     @staticmethod
-    async def authenticate(email: str, password: str) -> Optional[User]:
-        user = await UserService.get_user_by_email(email=email)
+    async def authenticate(matricule: str, password: str) -> Optional[User]:
+        user = await UserService.get_user_by_matricule(matricule=matricule)
         if not user:
             return None
         if not verify_password(password=password, hashed_pass=user.hashed_password):
@@ -34,8 +30,8 @@ class UserService:
         return user
 
     @staticmethod
-    async def get_user_by_email(email: str) -> Optional[User]:
-        user = await User.find_one(User.email == email)
+    async def get_user_by_matricule(matricule: str) -> Optional[User]:
+        user = await User.find_one(User.matricule == matricule)
         return user 
 
     @staticmethod

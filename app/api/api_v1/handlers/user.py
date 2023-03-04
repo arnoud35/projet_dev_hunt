@@ -16,12 +16,12 @@ async def create_user(data: UserAuth):
     except pymongo.errors.DuplicateKeyError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="User with this email or username already exist"
+            detail="User with this matricule already exist"
         )
-# fonction à determiner
+# get current_user
 @user_router.get('/me', summary="Get detail of currently logged in user", response_model=UserOut)
 async def get_current_logged_user(current_user: User = Depends(get_current_user)):
-    return await UserService.get_user_by_email(current_user.email)
+    return await UserService.get_user_by_matricule(current_user.matricule)
 
 @user_router.get('/{user_id}', summary="Get user by user.id", response_model=UserOut)
 async def retrieve(user_id: UUID, current_user: User = Depends(get_current_user)):

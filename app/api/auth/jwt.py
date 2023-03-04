@@ -17,11 +17,11 @@ auth_router = APIRouter()
 
 @auth_router.post('/login', summary="Create access and refresh tokens for user", response_model=TokenSchema)
 async def login(form_data: OAuth2PasswordRequestForm = Depends()) -> Any:
-    user = await UserService.authenticate(email=form_data.username, password = form_data.password)
+    user = await UserService.authenticate(matricule=form_data.username, password = form_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Incorrect email or password"
+            detail="Incorrect matricule or password"
         )
 
     return {
